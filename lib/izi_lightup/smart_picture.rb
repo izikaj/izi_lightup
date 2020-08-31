@@ -19,7 +19,7 @@ module IziLightup
             next unless version_name == :default || item.data.respond_to?(version_name)
 
             version = version_name == :default ? item.data : item.data.public_send(version_name)
-            next if version&.url&.blank?
+            next unless version&.file&.exists? && version&.url&.present?
 
             url = version.url
             params.merge!(%i[width height].zip(version.dimensions).to_h)
