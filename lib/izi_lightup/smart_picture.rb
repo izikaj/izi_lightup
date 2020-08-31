@@ -2,9 +2,9 @@
 
 module IziLightup
   module SmartPicture
-    include ActionView::Helpers::AssetTagHelper
-
     class << self
+      include ActionView::Helpers::AssetTagHelper
+
       def render(object, fields = %i[picture], versions = [], params = {})
         return '' if object.blank?
 
@@ -31,6 +31,14 @@ module IziLightup
         end
 
         ''
+      end
+
+      private
+
+      def fetch_items(object, fields)
+        Array.wrap(fields).map do |name|
+          object.respond_to?(name) ? object.public_send(name) : nil
+        end.compact
       end
     end
   end

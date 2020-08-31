@@ -31,13 +31,13 @@ module CriticalHelper
     return inline_css(name) if Rails.env.production?
 
     # inject measure js for development
-    inline_css(name) + inline_js('utils/measure.js')
+    inline_css(name) + inline_js('crit-utils/measure.js')
   end
 
-  def smart_picture(object, fields = %i[picture], versions = [], params = {})
+  def smart_picture(object, *args, **xargs, &block)
     return '' if object.blank?
 
-    IziLightup::SmartPicture.render(object, fields, versions, params)
+    IziLightup::SmartPicture.render(object, *args, **xargs, &block)
   end
 
   private
