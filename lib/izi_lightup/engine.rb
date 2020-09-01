@@ -12,6 +12,7 @@ module IziLightup
 
       loadCSS.js
       cssrelpreload.js
+      crit-utils/async-css.js
     ]
   end
 end
