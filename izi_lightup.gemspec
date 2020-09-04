@@ -7,6 +7,7 @@ Gem::Specification.new do |s|
   s.name = 'izi_lightup'
   s.version = IziLightup::VERSION.dup
   s.platform = Gem::Platform::RUBY
+  s.licenses = ['MIT']
   s.summary = 'Izi Lightup'
   s.description = 'Utils to speed up page load by using critical css &
                   deferred scripts initialization'
