@@ -33,9 +33,13 @@ module IziLightup
       end
 
       def raw_source(asset_path)
-        return find_sources_fallback(asset_path) unless manifest.respond_to?(:find_sources)
+        return find_sources_fallback(asset_path) if old_manifest?
 
         manifest.find_sources(asset_path).first&.html_safe
+      end
+
+      def old_manifest?
+        !manifest.respond_to?(:find_sources)
       end
 
       def manifest
@@ -43,9 +47,7 @@ module IziLightup
       end
 
       def find_sources_fallback(asset_path)
-        src = manifest.send(:find_asset, asset_path)
-
-        src&.source&.html_safe || ''
+        Rails.application.assets.find_asset(asset_path)&.source&.html_safe
       end
     end
   end
