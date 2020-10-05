@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 module CriticalHelper
-  def css_preload(name)
-    link = content_tag :link, '', rel: 'preload', href: stylesheet_path(name), as: 'style', onload: 'this.rel="stylesheet"'
+  def css_preload(names)
+    return '' if names.blank?
+    names = Array.wrap(names)
+
+    link = stylesheet_link_tag(*names, rel: 'preload', as: 'style', onload: 'this.rel="stylesheet"')
     noscript = content_tag :noscript do
-      content_tag :link, '', rel: 'stylesheet', href: stylesheet_path(name)
+      stylesheet_link_tag(*names)
     end
 
     link + noscript
@@ -24,14 +27,22 @@ module CriticalHelper
     inline_js('crit-utils/bundle.js').presence || '<!-- CRIT JS NOT FOUND! -->'.html_safe
   end
 
-  def critical_css
+  def critical_css(params = {})
     name = find_scoped_css('critical')
-    return '<!-- CRIT CSS NOT FOUND! -->'.html_safe if name.blank?
+    stylesheets = Array.wrap(params.fetch(:stylesheets, []))
+    data = StringIO.new
 
-    return inline_css(name) if Rails.env.production?
+    if name.blank?
+      # insert stylesheets directly if not crit css
+      data << '<!-- CRIT CSS NOT FOUND! -->'
+      data << stylesheet_link_tag(*stylesheets) if stylesheets.present?
+    else
+      data << inline_css(name)
+      data << css_preload(stylesheets) if stylesheets.present?
+      data << inline_js('crit-utils/measure.js') if Rails.env.development?
+    end
 
-    # inject measure js for development
-    inline_css(name) + inline_js('crit-utils/measure.js')
+    data.string.html_safe
   end
 
   def smart_picture(object, *args, **xargs, &block)
