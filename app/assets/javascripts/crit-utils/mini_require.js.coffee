@@ -15,8 +15,6 @@
   _buildSubscriptions = (id, node) ->
     data = __required[id]
     return if data.loaded
-    data.callbacks ||= []
-    data.started = true
 
     callback = node.onload
     node.onload = -> _onload(id)
@@ -35,13 +33,16 @@
 
   window.miniRequire ||= (key, source_url, callback = undefined) ->
     id = "source_#{key.replace(/[^a-z0-9_\-]+/ig, '_')}"
+    __required[id] ||= {loaded: false, callbacks: [], started: false}
+
+    # subscribe only if no source
+    return _subscribe(id, callback) unless source_url?.length > 0
 
     # subscribe only if already attached & started
-    return _subscribe(id, callback) if __required[id]?.started?
+    return _subscribe(id, callback) if __required[id].started
 
-    __required[id] = {loaded: false, callbacks: []}
-    # subscribe only if no source
-    return _subscribe(id, callback) unless source_url?
+    # mark as started
+    __required[id].started = true
 
     # attach script
     src = document.createElement('script')
