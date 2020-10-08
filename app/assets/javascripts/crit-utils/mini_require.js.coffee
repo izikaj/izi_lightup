@@ -16,6 +16,7 @@
     data = __required[id]
     return if data.loaded
     data.callbacks ||= []
+    data.started = true
 
     callback = node.onload
     node.onload = -> _onload(id)
@@ -35,8 +36,8 @@
   window.miniRequire ||= (key, source_url, callback = undefined) ->
     id = "source_#{key.replace(/[^a-z0-9_\-]+/ig, '_')}"
 
-    # subscribe only if already attached
-    return _subscribe(id, callback) if __required[id]?
+    # subscribe only if already attached & started
+    return _subscribe(id, callback) if __required[id]?.started?
 
     __required[id] = {loaded: false, callbacks: []}
     # subscribe only if no source
