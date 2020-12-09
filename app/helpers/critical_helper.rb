@@ -28,7 +28,8 @@ module CriticalHelper
   end
 
   def critical_css(params = {})
-    name = find_scoped_css('critical')
+    scope = params.fetch(:scope, 'critical')
+    name = find_scoped_css(scope)
     stylesheets = Array.wrap(params.fetch(:stylesheets, []))
     data = StringIO.new
 
