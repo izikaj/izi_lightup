@@ -55,4 +55,29 @@
 
     document.body.appendChild(src)
     true
+
+  window.miniPreload ||= (key, source_url, callback = undefined) ->
+    id = "source_#{key.replace(/[^a-z0-9_\-]+/ig, '_')}"
+    __required[id] ||= {loaded: false, callbacks: [], started: false}
+
+    # subscribe only if no source
+    return _subscribe(id, callback) unless source_url?.length > 0
+
+    # subscribe only if already attached & started
+    return _subscribe(id, callback) if __required[id].started
+
+    # mark as started
+    __required[id].started = true
+
+    # attach script
+    src = document.createElement('link')
+    src.id = id
+    src.rel = 'preload'
+    src.href = source_url
+    _buildSubscriptions(id, src)
+    _subscribe(id, callback)
+
+    document.head.appendChild(src)
+    true
+
 ))(window, document)

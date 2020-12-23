@@ -1,6 +1,6 @@
 ((window, document) -> (
   EVENT_TYPE = window.__activeEventName || 'Activity'
-  MAX_TIMEOUT = window.__activeTimeout || 5000
+  MAX_TIMEOUT = window.__activeTimeout || 10000
   TRACK_MARKING = window.__activeMark || '_real_track=true'
 
   if custom_mt = /^\?(\d+)$/.exec(window.location.search)
