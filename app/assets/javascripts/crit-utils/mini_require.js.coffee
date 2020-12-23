@@ -31,7 +31,11 @@
 
     data.callbacks.push(callback) if typeof(callback) is 'function'
 
-  window.miniRequire ||= (key, source_url, callback = undefined) ->
+  # window.miniRequire ||= (key, source_url, callback = undefined) ->
+  window.miniRequire ||= (params) ->
+    key = params.key || Math.random().toString(36).slice(2, 12)
+    callback = params.callback
+    source_url = params.src
     id = "source_#{key.replace(/[^a-z0-9_\-]+/ig, '_')}"
     __required[id] ||= {loaded: false, callbacks: [], started: false}
 
@@ -49,6 +53,7 @@
     src.id = id
     src.async = true
     src.defer = true
+    src.as = params.as || 'style'
     src.src = source_url
     _buildSubscriptions(id, src)
     _subscribe(id, callback)
