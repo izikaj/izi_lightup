@@ -10,7 +10,7 @@
 
     while callbacks.length > 0
       callback = callbacks.shift()
-      callback.call(window) if typeof(callback) is 'function'
+      callback.call(window, __required[id]) if typeof(callback) is 'function'
 
   _buildSubscriptions = (id, node) ->
     data = __required[id]
@@ -31,11 +31,8 @@
 
     data.callbacks.push(callback) if typeof(callback) is 'function'
 
-  # window.miniRequire ||= (key, source_url, callback = undefined) ->
-  window.miniRequire ||= (params) ->
-    key = params.key || Math.random().toString(36).slice(2, 12)
-    callback = params.callback
-    source_url = params.src
+  window.miniRequire ||= (key, source_url, callback = undefined) ->
+    key ||= Math.random().toString(36).slice(2, 12)
     id = "source_#{key.replace(/[^a-z0-9_\-]+/ig, '_')}"
     __required[id] ||= {loaded: false, callbacks: [], started: false}
 
@@ -53,15 +50,18 @@
     src.id = id
     src.async = true
     src.defer = true
-    src.as = params.as || 'style'
     src.src = source_url
+    __required[id].node = src
     _buildSubscriptions(id, src)
     _subscribe(id, callback)
 
     document.body.appendChild(src)
     true
 
-  window.miniPreload ||= (key, source_url, callback = undefined) ->
+  window.miniPreload ||= (params, callback = undefined) ->
+    key = params.key || Math.random().toString(36).slice(2, 12)
+    callback ||= params.callback
+    source_url = params.src
     id = "source_#{key.replace(/[^a-z0-9_\-]+/ig, '_')}"
     __required[id] ||= {loaded: false, callbacks: [], started: false}
 
@@ -79,6 +79,8 @@
     src.id = id
     src.rel = 'preload'
     src.href = source_url
+    src.as = params.as || 'style'
+    __required[id].node = src
     _buildSubscriptions(id, src)
     _subscribe(id, callback)
 
