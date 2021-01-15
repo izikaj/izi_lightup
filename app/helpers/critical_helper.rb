@@ -71,8 +71,12 @@ module CriticalHelper
   end
 
   def asset_exist?(name)
-    Rails.application.assets_manifest.find_sources(name)&.first&.present?
-  rescue TypeError => _e
-    false
+    return assets_manifest.find_sources(name)&.first&.present? if Rails.env.development?
+
+    assets_manifest.assets.key?(name)
+  end
+
+  def assets_manifest
+    @assets_manifest ||= Rails.application.assets_manifest
   end
 end
