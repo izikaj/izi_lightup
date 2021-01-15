@@ -71,12 +71,12 @@ module CriticalHelper
   end
 
   def asset_exist?(name)
-    return assets_manifest.find_sources(name)&.first&.present? if Rails.env.development?
+    return manifest.find_sources(name)&.first&.present? if Rails.env.development?
 
-    assets_manifest.assets.key?(name)
+    manifest.assets.key?(name)
   end
 
-  def assets_manifest
-    @assets_manifest ||= Rails.application.assets_manifest
+  def manifest
+    @manifest ||= Rails.application.assets_manifest
   end
 end
