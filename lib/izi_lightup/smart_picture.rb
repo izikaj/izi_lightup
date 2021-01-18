@@ -22,7 +22,9 @@ module IziLightup
             next unless version&.file&.exists? && version&.url&.present?
 
             url = version.url
-            params.merge!(%i[width height].zip(version.dimensions).to_h)
+            dimensions = safe_dimentions(item, version)
+            params.merge!(dimensions) if dimensions.present?
+
             return image_tag(url, params) unless block_given?
 
             yield(url, params)
@@ -34,6 +36,19 @@ module IziLightup
       end
 
       private
+
+      def safe_dimentions(item, version)
+        dimensions = nil
+        begin
+          dimensions = version.dimensions
+        rescue MiniMagick::Error => _e
+          dimensions = [item&.width, item&.height].compact
+        end
+
+        return {} if dimensions.blank?
+
+        %i[width height].zip(dimensions).to_h
+      end
 
       def fetch_items(object, fields)
         Array.wrap(fields).map do |name|
