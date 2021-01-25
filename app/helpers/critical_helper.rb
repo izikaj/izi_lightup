@@ -71,9 +71,23 @@ module CriticalHelper
   end
 
   def asset_exist?(name)
-    return manifest.find_sources(name)&.first&.present? if Rails.env.development?
+    return find_asset_source(name)&.present? if Rails.env.development?
 
     manifest.assets.key?(name)
+  end
+
+  def find_asset_source(name)
+    return find_sources_fallback(name) if old_manifest?
+
+    manifest.find_sources(name)&.first
+  end
+
+  def find_sources_fallback(asset_path)
+    Rails.application.assets.find_asset(asset_path)
+  end
+
+  def old_manifest?
+    !manifest.respond_to?(:find_sources)
   end
 
   def manifest
