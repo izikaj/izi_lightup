@@ -52,16 +52,27 @@ module CriticalHelper
     IziLightup::SmartPicture.render(object, *args, **xargs, &block)
   end
 
+  def debug_critical_css(scope_name = 'critical')
+    {
+      lookup: scoped_css_files(scope_name),
+      found: find_scoped_css(scope_name)
+    }.to_json.html_safe
+  end
+
   private
 
-  def find_scoped_css(scope_name)
+  def scoped_css_files(scope_name)
     [
       File.join(scope_name, "#{controller_path}_#{action_name}.css"),
       File.join(scope_name, "#{controller_path}.css"),
       File.join(scope_name, "#{controller_name}_#{action_name}.css"),
       File.join(scope_name, "#{controller_name}.css"),
       "#{scope_name}.css"
-    ].detect { |n| asset_exist?(n) }
+    ].uniq
+  end
+
+  def find_scoped_css(scope_name)
+    scoped_css_files(scope_name).detect { |n| asset_exist?(n) }
   end
 
   def fetch_items(object, fields)
