@@ -63,12 +63,23 @@ module CriticalHelper
 
   def scoped_css_files(scope_name)
     [
-      File.join(scope_name, "#{controller_path}_#{action_name}.css"),
-      File.join(scope_name, "#{controller_path}.css"),
-      File.join(scope_name, "#{controller_name}_#{action_name}.css"),
-      File.join(scope_name, "#{controller_name}.css"),
-      "#{scope_name}.css"
-    ].uniq
+      "#{controller_path}_#{action_name}",
+      controller_path,
+      *scoped_namespace_file(scope_name),
+      "#{controller_name}_#{action_name}",
+      controller_name,
+      scope_name
+    ].compact.uniq.map { |l| File.join(scope_name, "#{l}.css") }
+  end
+
+  def scoped_namespace_file(scope_name)
+    scopes = []
+    return scopes if controller_path == controller_name
+
+    parts = controller_path.gsub(/\/#{controller_name}$/, '').split('/').reject(&:blank?)
+    parts.each { |p| scopes.unshift(File.join([scopes.first, p].compact)) }
+
+    scopes.uniq
   end
 
   def find_scoped_css(scope_name)
