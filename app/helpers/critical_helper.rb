@@ -113,6 +113,6 @@ module CriticalHelper
   end
 
   def manifest
-    @manifest ||= Rails.application.assets_manifest
+    @manifest ||= Rails.application&.assets_manifest
   end
 end

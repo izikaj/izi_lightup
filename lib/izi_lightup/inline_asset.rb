@@ -43,7 +43,7 @@ module IziLightup
       end
 
       def manifest
-        @manifest ||= Rails.application.assets_manifest
+        @manifest ||= Rails.application&.assets_manifest
       end
 
       def find_sources_fallback(asset_path)
