@@ -3,3 +3,5 @@
 *.yml
 .env
 .byebug_history
+spec/dummy/tmp
+spec/dummy/log

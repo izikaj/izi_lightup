@@ -14,8 +14,13 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-require 'rails/all'
-require 'izi_lightup'
+# require 'rails/all'
+# require 'izi_lightup'
+
+require File.expand_path('../spec/dummy/config/environment.rb', __dir__)
+ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '../../../spec/dummy'
+
+require 'rspec/rails'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
