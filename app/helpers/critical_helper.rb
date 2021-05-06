@@ -54,25 +54,27 @@ module CriticalHelper
 
   def debug_critical_css(scope_name = 'critical')
     {
-      lookup: scoped_css_files(scope_name),
+      lookup: names_for_critical_lookup(scope_name),
       found: find_scoped_css(scope_name)
     }.to_json.html_safe
   end
 
-  private
-
-  def scoped_css_files(scope_name)
-    [
-      "#{controller_path}_#{action_name}",
+  def names_for_critical_lookup(scope_name = 'critical', extname = '.css')
+    names = [
+      [controller_path, action_name].compact.join('_'),
       controller_path,
-      *scoped_namespace_file(scope_name),
-      "#{controller_name}_#{action_name}",
+      *scoped_namespace_file,
+      [controller_name, action_name].compact.join('_'),
       controller_name,
-      scope_name
-    ].compact.uniq.map { |l| File.join(scope_name, "#{l}.css") }
+    ].reject(&:blank?).uniq
+    names << nil
+
+    names.map { |l| "#{File.join([scope_name, l].compact)}#{extname}" }
   end
 
-  def scoped_namespace_file(scope_name)
+  private
+
+  def scoped_namespace_file(_scope_name = nil)
     scopes = []
     return scopes if controller_path == controller_name
 
@@ -83,7 +85,7 @@ module CriticalHelper
   end
 
   def find_scoped_css(scope_name)
-    scoped_css_files(scope_name).detect { |n| asset_exist?(n) }
+    names_for_critical_lookup(scope_name).detect { |n| asset_exist?(n) }
   end
 
   def fetch_items(object, fields)
@@ -93,9 +95,13 @@ module CriticalHelper
   end
 
   def asset_exist?(name)
-    return find_asset_source(name)&.present? if Rails.env.development?
+    return find_asset_source(name)&.present? if compile_assets?
 
     manifest.assets.key?(name)
+  end
+
+  def compile_assets?
+    Rails.application.config.assets.compile
   end
 
   def find_asset_source(name)
@@ -113,6 +119,6 @@ module CriticalHelper
   end
 
   def manifest
-    @manifest ||= Rails.application.assets_manifest
+    @manifest ||= Rails.application&.assets_manifest
   end
 end
