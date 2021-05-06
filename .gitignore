@@ -7,3 +7,4 @@ spec/dummy/tmp
 spec/dummy/log
 !.github/workflows/test.yml
 !spec/support/database.github.yml
+!spec/dummy/config/database.yml
