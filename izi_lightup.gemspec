@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path('../lib', __FILE__)
+$LOAD_PATH.push File.expand_path('lib', __dir__)
 require 'izi_lightup/version'
 
 Gem::Specification.new do |s|
@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency('rails', '~> 4.2.0')
   s.add_development_dependency('byebug')
-  s.add_development_dependency('rspec-rails')
   s.add_development_dependency('guard-rspec')
   s.add_development_dependency('rspec-html-matchers')
+  s.add_development_dependency('rspec-rails')
 end

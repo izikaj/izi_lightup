@@ -14,12 +14,17 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+require 'gemika'
+require 'support/database'
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../spec/dummy/config/environment.rb', __dir__)
 ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '../../../spec/dummy'
 
 require 'rspec/rails'
 require 'support/sprocket_ext'
+
+# ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: ':memory:')
 
 RSpec.configure do |config|
   config.include SprocketExt
