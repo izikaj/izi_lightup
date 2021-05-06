@@ -14,15 +14,16 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
-# require 'rails/all'
-# require 'izi_lightup'
-
+ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../spec/dummy/config/environment.rb', __dir__)
 ENV['RAILS_ROOT'] ||= File.dirname(__FILE__) + '../../../spec/dummy'
 
 require 'rspec/rails'
+require 'support/sprocket_ext'
 
 RSpec.configure do |config|
+  config.include SprocketExt
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -44,6 +45,14 @@ RSpec.configure do |config|
     # a real object. This is generally recommended, and will default to
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
+  end
+
+  config.before(:suite) do
+    # %x[bundle exec rake assets:precompile]
+  end
+
+  config.after(:all) do
+    clean_all_assets!
   end
 
   # This option will default to `:apply_to_host_groups` in RSpec 4 (and will

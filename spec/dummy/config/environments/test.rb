@@ -37,6 +37,16 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  config.assets.compile = true
+  config.assets.compress = false
+  config.assets.digest = false
+  config.action_controller.asset_host = "file://#{::Rails.root}/public"
+  config.assets.prefix = 'assets_test'
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Log Settings
+  config.colorize_logging = true
+  config.log_level = :debug
 end
