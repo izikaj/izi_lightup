@@ -5,3 +5,4 @@
 .byebug_history
 spec/dummy/tmp
 spec/dummy/log
+!.github/workflows/test.yml
