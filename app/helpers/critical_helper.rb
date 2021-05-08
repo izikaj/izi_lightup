@@ -119,6 +119,21 @@ module CriticalHelper
   end
 
   def manifest
-    @manifest ||= Rails.application&.assets_manifest
+    @manifest ||= find_or_build_assets_manifest
+  end
+
+  def find_or_build_assets_manifest
+    app = Rails.application
+
+    return app.assets_manifest if app.respond_to?(:assets_manifest)
+    return build_manifest(app.assets) if app.respond_to?(:assets)
+  end
+
+  def build_manifest(assets = [])
+    ::Sprockets::Manifest.new(assets, assets_output_dir)
+  end
+
+  def assets_output_dir
+    @assets_output_dir ||= Rails.root.join('public', Rails.application.config.assets.prefix.presence || 'assets')
   end
 end

@@ -1,8 +1,8 @@
 PATH
-  remote: .
+  remote: ../../../..
   specs:
-    izi_lightup (1.0.17)
-      rails (~> 4.2.0)
+    izi_lightup (1.0.18)
+      rails (>= 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -173,7 +173,7 @@ DEPENDENCIES
   guard-rspec
   izi_lightup!
   listen (< 3.3.0)
-  rails (~> 4.2.11)
+  rails (~> 4.2.0)
   rake
   rspec
   rspec-html-matchers

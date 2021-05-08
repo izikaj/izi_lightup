@@ -28,7 +28,7 @@ RSpec.describe ::CriticalHelper, type: :helper do
     end
 
     it 'should render many stylesheets inside one block' do
-      rendered = helper.css_preload(%w[application common vendor])
+      rendered = helper.css_preload(%w[application critical vendor])
       expect(rendered).to have_tag('link', with: { rel: :preload }, count: 3)
       expect(rendered).to have_tag('noscript') do
         with_tag('link', with: { rel: :stylesheet }, count: 3)

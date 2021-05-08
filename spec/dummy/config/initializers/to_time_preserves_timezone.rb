@@ -7,4 +7,7 @@
 #
 # Rails 5.0 introduced this config option so that apps made with earlier
 # versions of Rails are not affected when upgrading.
-ActiveSupport.to_time_preserves_timezone = true
+
+if Rails::VERSION::MAJOR >= 5
+  ActiveSupport.to_time_preserves_timezone = true
+end

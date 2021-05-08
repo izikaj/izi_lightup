@@ -1,5 +1,5 @@
 PATH
-  remote: .
+  remote: ../../..
   specs:
     izi_lightup (1.0.18)
       rails (>= 3.0.0)

@@ -1,4 +1,9 @@
-Rails.application.configure do
+# Default rails 4+ configurator
+target = Rails.application
+# Legacy rails 3+ configurator
+target = App::Application if Rails::VERSION::MAJOR == 3
+
+target.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's
@@ -13,8 +18,19 @@ Rails.application.configure do
   config.eager_load = false
 
   # Configure static file server for tests with Cache-Control for performance.
-  config.serve_static_files   = true
-  config.static_cache_control = 'public, max-age=3600'
+
+  if Rails::VERSION::MAJOR == 3
+    config.assets.enabled = true
+  end
+
+  if Rails::VERSION::MAJOR > 4
+    config.public_file_server.enabled = true
+    config.public_file_server.headers = { 'Cache-Control' => 'public, max-age=3600' }
+    config.active_record.sqlite3.represent_boolean_as_integer = true if Rails::VERSION::MINOR >= 2
+  else
+    config.serve_static_files   = true
+    config.static_cache_control = 'public, max-age=3600'
+  end
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true

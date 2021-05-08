@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir['{spec}/**/*']
   s.require_paths = ['lib']
 
-  s.add_runtime_dependency('rails', '~> 4.2.0')
+  s.add_runtime_dependency('rails', '>= 3.0.0')
   s.add_development_dependency('byebug')
   s.add_development_dependency('guard-rspec')
   s.add_development_dependency('rspec-html-matchers')

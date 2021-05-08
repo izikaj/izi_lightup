@@ -43,6 +43,8 @@ module IziLightup
       end
 
       def manifest
+        return Rails.application.assets unless Rails.application.respond_to?(:assets_manifest)
+
         @manifest ||= Rails.application&.assets_manifest
       end
 
