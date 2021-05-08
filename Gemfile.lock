@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    izi_lightup (1.0.18)
+    izi_lightup (1.0.19)
       rails (>= 3.0.0)
 
 GEM

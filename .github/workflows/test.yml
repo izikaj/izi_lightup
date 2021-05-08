@@ -17,27 +17,38 @@ jobs:
         include:
           - gemfile: gemfiles/ruby_2.3/rails_3.2/Gemfile
             ruby: 2.3.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.3/rails_4.2/Gemfile
             ruby: 2.3.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.3/rails_5.0/Gemfile
             ruby: 2.3.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.3/rails_5.2/Gemfile
             ruby: 2.3.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.5/rails_4.2/sprockets-4.0/Gemfile
             ruby: 2.5.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.5/rails_4.2/sprockets-3.7/Gemfile
             ruby: 2.5.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.5/rails_5.0/sprockets-4.0/Gemfile
             ruby: 2.5.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.5/rails_5.0/sprockets-3.7/Gemfile
             ruby: 2.5.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.5/rails_6.0/sprockets-4.0/Gemfile
             ruby: 2.5.8
+            bundler: 1.17.3
           - gemfile: gemfiles/ruby_2.5/rails_6.0/sprockets-3.7/Gemfile
             ruby: 2.5.8
+            bundler: 1.17.3
 
     env:
       BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+      BUNDLER_VERSION: "${{ matrix.bundler }}"
     steps:
       - uses: actions/checkout@v2
       - name: Install ruby
@@ -46,7 +57,7 @@ jobs:
           ruby-version: "${{ matrix.ruby }}"
       - name: Bundle
         run: |
-          gem install bundler:2.2.15
-          bundle install --no-deployment
+          gem install "bundler:$BUNDLER_VERSION"
+          bundle _"$BUNDLER_VERSION"_ install --no-deployment
       - name: Run tests
         run: bundle exec rspec
