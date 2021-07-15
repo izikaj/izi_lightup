@@ -19,7 +19,7 @@ module SprocketExt
   end
 
   def compile_all_assets!
-    compile_asset(Rails.application.config.assets.precompile)
+    compile_asset(rails_app.config.assets.precompile)
   end
 
   private
@@ -29,10 +29,10 @@ module SprocketExt
   end
 
   def find_or_build_assets_manifest
-    app = Rails.application
+    return rails_app.assets_manifest if rails_app.respond_to?(:assets_manifest)
+    return build_manifest(rails_app.assets) if rails_app.respond_to?(:assets)
 
-    return app.assets_manifest if app.respond_to?(:assets_manifest)
-    return build_manifest(app.assets) if app.respond_to?(:assets)
+    nil
   end
 
   def build_manifest(assets = [])
@@ -40,6 +40,10 @@ module SprocketExt
   end
 
   def assets_output_dir
-    @assets_output_dir ||= Rails.root.join('public', Rails.application.config.assets.prefix.presence || 'assets')
+    @assets_output_dir ||= Rails.root.join('public', rails_app.config.assets.prefix.presence || 'assets')
+  end
+
+  def rails_app
+    Rails.application
   end
 end

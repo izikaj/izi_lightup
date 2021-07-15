@@ -26,11 +26,11 @@ Utils to speed up page load by using critical css & deferred scripts initializat
 
 ### install deps
 
-```bunlde exec rake matrix:install```
+```bundle exec rake matrix:install```
 
 ### run tests
 
-```bunlde exec rake matrix:spec```
+```bundle exec rake matrix:spec```
 
 ### Currently testing on versions:
 

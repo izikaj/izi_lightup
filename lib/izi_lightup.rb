@@ -10,6 +10,8 @@ module IziLightup
     end
   end
 
+  autoload :Asset, 'izi_lightup/asset'
+  autoload :AssetInfo, 'izi_lightup/asset_info'
   autoload :InlineAsset, 'izi_lightup/inline_asset'
   autoload :SmartPicture, 'izi_lightup/smart_picture'
 

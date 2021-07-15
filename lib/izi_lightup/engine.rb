@@ -6,6 +6,7 @@ module IziLightup
     engine_name 'izi_lightup'
 
     require_relative 'extentions/autoload_paths'
+    require_relative 'extentions/mime_types'
 
     initializer 'izi_lightup.assets.precompile' do |app|
       app.config.assets.precompile += %w[
