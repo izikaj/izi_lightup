@@ -45,7 +45,7 @@ module IziLightup
     def detect_path
       return unless exist?
 
-      env_asset&.pathname.presence || assets_output_dir.join(final_asset_name)
+      env_pathname.presence || assets_output_dir.join(final_asset_name)
     end
 
     def detect_content_type
@@ -59,6 +59,14 @@ module IziLightup
       return unless exist?
 
       FastImage.size(path)
+    end
+
+    def env_pathname
+      return unless env_asset
+      return env_asset.pathname if env_asset.respond_to?(:pathname)
+      return Pathname.new(env_asset.filename) if env_asset.respond_to?(:filename)
+
+      nil
     end
 
     def env_asset
