@@ -111,7 +111,7 @@ module CriticalHelper
   end
 
   def find_sources_fallback(asset_path)
-    Rails.application.assets.find_asset(asset_path)
+    Rails.application.assets.find_asset(asset_path) if Rails.application.assets
   end
 
   def old_manifest?
@@ -134,6 +134,6 @@ module CriticalHelper
   end
 
   def assets_output_dir
-    @assets_output_dir ||= Rails.root.join('public', Rails.application.config.assets.prefix.presence || 'assets')
+    @assets_output_dir ||= Rails.root.join('public', Rails.application.config.assets.prefix.presence&.gsub(/^\//, '') || 'assets')
   end
 end
