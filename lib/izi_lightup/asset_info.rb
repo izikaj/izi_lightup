@@ -88,7 +88,7 @@ module IziLightup
     end
 
     def assets_output_dir
-      @assets_output_dir ||= manifest&.dir.presence || Rails.root.join('public', assets_prefix)
+      @assets_output_dir ||= Pathname.new(manifest&.dir.presence || Rails.root.join('public', assets_prefix))
     end
 
     def assets_prefix
