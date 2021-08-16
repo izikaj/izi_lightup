@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    izi_lightup (1.0.20)
+    izi_lightup (1.0.21)
       fastimage (>= 2.0.0)
       rails (>= 3.0.0)
 
