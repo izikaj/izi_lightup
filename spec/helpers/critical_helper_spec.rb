@@ -67,11 +67,31 @@ RSpec.describe ::CriticalHelper, type: :helper do
       end
 
       it 'should not render warning' do
-        expect(helper.critical_css).not_to include 'CRIT CSS NOT FOUND'
+        expect(helper.critical_css).not_to include('CRIT CSS NOT FOUND')
       end
 
       it 'should find welcome#index critical CSS' do
-        expect(helper.critical_css).to include 'WELCOME_INDEX_CRITICAL_CSS'
+        expect(helper.critical_css).to include('WELCOME_INDEX_CRITICAL_CSS')
+      end
+    end
+
+    context 'param: scope' do
+      it 'should customize scope for search critical CSS' do
+        results = helper.critical_css(scope: 'custom')
+        expect(results).to be_present
+        expect(results).to include('CRIT CSS NOT FOUND')
+        expect(results).not_to include('WELCOME_INDEX_CRITICAL_CSS')
+      end
+    end
+
+    context 'param: stylesheets' do
+      it 'should inject critical CSS & preload provided external stylesheets' do
+        results = helper.critical_css(stylesheets: 'application')
+
+        expect(results).to be_present
+        expect(results).not_to include('CRIT CSS NOT FOUND')
+        expect(results).to include('WELCOME_INDEX_CRITICAL_CSS')
+        expect(results).to include('application.css')
       end
     end
 
@@ -86,16 +106,16 @@ RSpec.describe ::CriticalHelper, type: :helper do
       end
 
       it 'should find css file content' do
-        expect(helper.critical_css).to include 'WELCOME_INDEX_CRITICAL_CSS'
+        expect(helper.critical_css).to include('WELCOME_INDEX_CRITICAL_CSS')
       end
 
       it 'should find not precompiled CSS' do
-        allow(helper).to receive(:action_name).and_return 'other'
+        allow(helper).to receive(:action_name).and_return('other')
 
         # check file is not precompiled
         expect(Rails.application.config.assets.precompile.detect { |p| p == 'critical/welcome_other.css' }).to be_nil
 
-        expect(helper.critical_css).to include 'WELCOME_OTHER_CRITICAL_CSS'
+        expect(helper.critical_css).to include('WELCOME_OTHER_CRITICAL_CSS')
       end
     end
 
@@ -184,6 +204,13 @@ RSpec.describe ::CriticalHelper, type: :helper do
     context 'default request' do
       it 'should work' do
         expect(helper.critical_js).to be_present
+      end
+
+      it 'bundle should be overrideable' do
+        results = helper.critical_js(bundle: 'application.js')
+
+        expect(results).to be_present
+        expect(results).to include('APPLICATION_JS')
       end
     end
   end

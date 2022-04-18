@@ -3,6 +3,10 @@
     return function(success, failed) {
       var _called = false, _timer, _timeouter;
 
+      function isFn(t) {
+        return typeof t === "function";
+      }
+
       function stop() {
         if (_timer !== undefined) {
           clearInterval(_timer);
@@ -15,32 +19,24 @@
       }
 
       function checker() {
-        if (_called || typeof window[key] === 'undefined') {
-          return;
-        }
-
-        if ((typeof deepCheck === 'function') && !deepCheck.call(window[key])) {
-          return;
-        }
+        if (_called || typeof window[key] === "undefined") return;
+        if (isFn(deepCheck) && !deepCheck.call(window[key])) return;
 
         stop();
         _called = true;
-        if (typeof success === 'function') {
-          success.call(window[key], window[key]);
-        }
+        if (isFn(success)) success.call(window[key], window[key]);
       };
 
-      _timeouter = setTimeout((function () {
-        if (!_called) {
-          var msg = "not loaded component [" + key + "] in " + waitFor.timeout;
-          stop();
-          if (typeof failed === 'function') {
-            failed.call(this, msg);
-          } else {
-            console.warn(msg);
-          }
-        }
-      }), waitFor.timeout);
+      _timeouter = setTimeout(function () {
+        var msg;
+        if (_called) return;
+
+        stop();
+        msg = "not loaded component [" + key + "] in " + waitFor.timeout;
+        if (isFn(failed)) return failed.call(this, msg);
+
+        console.warn(msg);
+      }, waitFor.timeout);
       _timer = setInterval(checker, interval || waitFor.tick);
       checker();
     };

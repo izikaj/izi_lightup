@@ -6,21 +6,21 @@
   MAX_TIMEOUT = 15000;
   __print = function(msg, value) {
     var info_css, result_css, tag, tag_css;
-    info_css = 'color: silver;';
+    info_css = "color: silver;";
     if (value >= LCS_BAD) {
-      result_css = 'color: red; font-weight: bold;';
-      tag_css = 'color: red; font-weight: bold;';
-      tag = 'ERROR';
+      result_css = "color: red; font-weight: bold;";
+      tag_css = "color: red; font-weight: bold;";
+      tag = "ERROR";
     } else if (value >= LCS_OK) {
-      result_css = 'color: orange; font-style: italic;';
-      tag_css = 'color: orange; font-weight: bold;';
-      tag = 'WARN';
+      result_css = "color: orange; font-style: italic;";
+      tag_css = "color: orange; font-weight: bold;";
+      tag = "WARN";
     } else {
-      result_css = 'color: green;';
-      tag_css = 'color: green; font-weight: bold;';
-      tag = 'OK';
+      result_css = "color: green;";
+      tag_css = "color: green; font-weight: bold;";
+      tag = "OK";
     }
-    return console.debug('%cMEASURE: %c<%s> %c%s', info_css, tag_css, tag, result_css, msg);
+    return console.debug("%cMEASURE: %c<%s> %c%s", info_css, tag_css, tag, result_css, msg);
   };
   __ttlTimeout = void 0;
   __lcs = function() {
@@ -47,13 +47,13 @@
       }
       return results;
     });
-    console.debug('INIT LCS COUNTER...');
+    console.debug("INIT LCS COUNTER...");
     performanceObserver.observe({
-      type: 'layout-shift',
+      type: "layout-shift",
       buffered: true
     });
     __unsub = function() {
-      performanceObserver.disconnect('layout-shift');
+      performanceObserver.disconnect("layout-shift");
       __ttlTimeout = void 0;
       if (__finTimeout != null) {
         clearTimeout(__finTimeout);
