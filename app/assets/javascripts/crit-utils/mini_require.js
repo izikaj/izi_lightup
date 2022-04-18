@@ -1,124 +1,117 @@
-(function(window, document) {
-  var _buildSubscriptions, _onload, _subscribe;
+(function (window, document) {
   window.__required || (window.__required = {});
-  _onload = function(id) {
-    var callback, callbacks, results;
-    if (typeof __required[id] === 'undefined' || __required[id].loaded) {
-      return;
-    }
-    __required[id].loaded = true;
-    callbacks = __required[id].callbacks;
-    if (!Array.isArray(callbacks)) {
-      return;
-    }
-    results = [];
-    while (callbacks.length > 0) {
-      callback = callbacks.shift();
-      if (typeof callback === 'function') {
-        results.push(callback.call(window, __required[id]));
-      } else {
-        results.push(void 0);
+
+  function isFn(t) {
+    return typeof t === "function";
+  }
+
+  function isPres(t) {
+    return typeof t === "string" && t.length > 0;
+  }
+
+  function $$onload(id) {
+    return function (_evt) {
+      var cb, req = __required[id];
+      if (!req || req.loaded) return;
+
+      req.loaded = true;
+      if (!Array.isArray(req.callbacks)) return;
+
+      while (cb = req.callbacks.shift()) {
+        if (isFn(cb)) cb.call(window, req);
       }
     }
-    return results;
+  }
+
+  function $$on(node, kind, cb) {
+    if (!isFn(node[kind])) return;
+    node[kind]("load", cb);
+  }
+
+  function $$attach(id, node) {
+    var cb, req = __required[id];
+    if (req.loaded) return;
+
+    cb = node.onload;
+    if (isFn(cb)) req.callbacks.push(cb);
+
+    node.onload = cb = $$onload(id);
+    $$on(node, "addEventListener", cb);
+    $$on(node, "attachEvent", cb);
+  }
+
+  function $$sub(id, cb) {
+    var req = __required[id];
+    if (!req) return;
+    if (req.loaded) {
+      setTimeout(cb, 1);
+    } else if (isFn(cb)) {
+      req.callbacks.push(cb);
+    }
+    return req;
   };
-  _buildSubscriptions = function(id, node) {
-    var callback, data;
-    data = __required[id];
-    if (data.loaded) {
-      return;
-    }
-    callback = node.onload;
-    node.onload = function() {
-      return _onload(id);
-    };
-    if (typeof node.addEventListener === 'function') {
-      node.addEventListener('load', function() {
-        return _onload(id);
-      });
-    }
-    if (typeof node.attachEvent === 'function') {
-      node.attachEvent('load', function() {
-        return _onload(id);
-      });
-    }
-    if (typeof callback === 'function') {
-      return data.callbacks.push(callback);
-    }
-  };
-  _subscribe = function(id, callback) {
-    var data;
-    if (typeof __required[id] === 'undefined') {
-      return;
-    }
-    data = __required[id];
-    if (data.loaded) {
-      return setTimeout(callback, 0);
-    }
-    if (typeof callback === 'function') {
-      return data.callbacks.push(callback);
-    }
-  };
-  window.miniRequire || (window.miniRequire = function(key, source_url, callback) {
-    var id, src;
-    if (callback == null) {
-      callback = void 0;
-    }
-    key || (key = Math.random().toString(36).slice(2, 12));
-    id = "source_" + (key.replace(/[^a-z0-9_\-]+/ig, '_'));
+
+  function uid() {
+    return Math.random().toString(36).slice(2, 12);
+  }
+
+  function toID(key) {
+    return "source_" + (key.replace(/[^a-z0-9_\-]+/ig, "_"));
+  }
+
+  window.miniRequire || (window.miniRequire = function (key, src, cb) {
+    key || (key = uid());
+    var id = toID(key);
+
     __required[id] || (__required[id] = {
       loaded: false,
       callbacks: [],
       started: false
     });
-    if (!((source_url != null ? source_url.length : void 0) > 0)) {
-      return _subscribe(id, callback);
-    }
-    if (__required[id].started) {
-      return _subscribe(id, callback);
-    }
+
+    if (!isPres(src)) return $$sub(id, cb);
+    if (__required[id].started) return $$sub(id, cb);
+
     __required[id].started = true;
-    src = document.createElement('script');
-    src.id = id;
-    src.async = true;
-    src.defer = true;
-    src.src = source_url;
-    __required[id].node = src;
-    _buildSubscriptions(id, src);
-    _subscribe(id, callback);
-    document.body.appendChild(src);
-    return true;
+    var node = document.createElement("script");
+    node.id = id;
+    node.async = true;
+    node.defer = true;
+    node.src = src;
+    __required[id].node = node;
+    $$attach(id, node);
+    $$sub(id, cb);
+    (document.body || document.head).appendChild(node);
+    return __required[id]
   });
-  return window.miniPreload || (window.miniPreload = function(params, callback) {
-    var id, key, source_url, src;
-    if (callback == null) {
-      callback = void 0;
+
+  window.miniPreload || (window.miniPreload = function (params, cb) {
+    if (typeof params === "string") {
+      params = {
+        src: params
+      };
     }
-    key = params.key || Math.random().toString(36).slice(2, 12);
-    callback || (callback = params.callback);
-    source_url = params.src;
-    id = "source_" + (key.replace(/[^a-z0-9_\-]+/ig, '_'));
+    params.key || (params.key = uid());
+    cb || (cb = params.callback);
+    var id = toID(params.key);
     __required[id] || (__required[id] = {
       loaded: false,
       callbacks: [],
       started: false
     });
-    if (!((source_url != null ? source_url.length : void 0) > 0)) {
-      return _subscribe(id, callback);
-    }
-    if (__required[id].started) {
-      return _subscribe(id, callback);
-    }
+
+    if (!isPres(params.src)) return $$sub(id, cb);
+    if (__required[id].started) return $$sub(id, cb);
+
     __required[id].started = true;
-    src = document.createElement('link');
-    src.id = id;
-    src.rel = 'preload';
-    src.href = source_url;
-    src.as = params.as || 'style';
-    __required[id].node = src;
-    _buildSubscriptions(id, src);
-    _subscribe(id, callback);
-    document.head.appendChild(src);
-    return true;
+    var node = document.createElement("link");
+    node.id = id;
+    node.rel = "preload";
+    node.href = params.src;
+    node.as = params.as || "style";
+    __required[id].node = node;
+    $$attach(id, node);
+    $$sub(id, cb);
+    document.head.appendChild(node);
   });
 })(window, document);
