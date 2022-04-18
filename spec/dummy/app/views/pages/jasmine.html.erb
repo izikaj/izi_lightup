@@ -18,5 +18,26 @@
   </head>
   <body>
     <%= javascript_include_tag 'application_spec', debug: true %>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      .jasmine_html-reporter {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+      }
+      .jasmine_html-reporter .jasmine-banner {
+        margin: 0;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+      }
+      .jasmine_html-reporter .jasmine-banner .jasmine-version {
+        flex-grow: 1;
+        top: 0;
+      }
+    </style>
   </body>
 </html>

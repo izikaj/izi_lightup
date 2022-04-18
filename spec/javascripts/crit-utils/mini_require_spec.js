@@ -4,6 +4,7 @@ describe("miniRequire", function () {
     expect(typeof miniRequire).toBe("function");
   });
 });
+
 describe("miniPreload", function () {
   it("should exists as global function", function () {
     expect(miniPreload).toBeDefined();

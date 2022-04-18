@@ -93,17 +93,18 @@ describe("waitFor", function () {
       });
     });
 
-    it("should call deep check unless it returns true", function () {
+    it("should call deep check untill it returns true", function () {
       var KEY = "key" + Math.random();
       var count = 0;
+      waitFor.timeout = 500;
       return new Promise(function (resolve, reject) {
         setTimeout(function () {
           window[KEY] = true;
         }, 5);
         waitFor(KEY, function() {
-          return ++count >= 10;
+          return ++count >= 5;
         })(function () {
-          expect(count).toBe(10);
+          expect(count).toBe(5);
           resolve();
         }, reject);
       });
