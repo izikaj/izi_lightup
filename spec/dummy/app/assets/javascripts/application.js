@@ -1,1 +1,3 @@
 // APPLICATION_JS
+
+window["APPLICATION_JS"] = "TODO";

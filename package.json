@@ -1,0 +1,31 @@
+{
+  "name": "izi_lightup",
+  "version": "1.0.0",
+  "description": "Utils to speed up page load by using critical css & deferred scripts initialization",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test:rspec": "bundle exec rspec",
+    "test:karma": "karma start",
+    "test:all": "npm run test:rspec && npm run test:karma",
+    "test": "karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/izikaj/izi_lightup.git"
+  },
+  "author": "IzikAJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/izikaj/izi_lightup/issues"
+  },
+  "homepage": "https://github.com/izikaj/izi_lightup#readme",
+  "devDependencies": {
+    "jasmine-core": "^4.1.0",
+    "karma": "^6.3.18",
+    "karma-chrome-launcher": "^3.1.1",
+    "karma-jasmine": "^5.0.0"
+  }
+}

@@ -2,6 +2,44 @@
 
 Utils to speed up page load by using critical css & deferred scripts initialization
 
+## Usage
+
+### JS utils
+
+#### activeOn
+```JavaScript
+activeOn(function() {
+  console.log("should activate large client oriented JS here");
+});
+```
+
+#### waitFor
+```JavaScript
+waitFor("jQuery", function() {
+  $("body").css("background", "orange");
+});
+waitFor("jQuery", function() { return $.fn && $.fn.select2 }, function() {
+  $("select").select2();
+});
+```
+
+#### miniRequire
+```JavaScript
+miniRequire("main-bundle", "/assets/application.js");
+var src = "https://cdnjs.cloudflare.com/ajax/libs/tooltipster/4.2.8/js/tooltipster.bundle.min.js"
+miniRequire("main-bundle", src, function() {
+  $('.tooltip').tooltipster();
+});
+```
+
+#### miniPreload
+```JavaScript
+miniPreload("/assets/font.woff2");
+miniPreload("/assets/extra.css", function(ctx) {
+  ctx.node.rel = "stylesheet";
+});
+```
+
 ## Requirements
 
 - ruby 2.3+
@@ -26,11 +64,15 @@ Utils to speed up page load by using critical css & deferred scripts initializat
 
 ### install deps
 
-```bundle exec rake matrix:install```
+```sh
+bundle exec rake matrix:install
+```
 
 ### run tests
 
-```bundle exec rake matrix:spec```
+```sh
+bundle exec rake matrix:spec
+```
 
 ### Currently testing on versions:
 

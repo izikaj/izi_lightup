@@ -23,8 +23,9 @@ module CriticalHelper
     raw
   end
 
-  def critical_js
-    inline_js('crit-utils/bundle.js').presence || '<!-- CRIT JS NOT FOUND! -->'.html_safe
+  def critical_js(bundle: 'crit-utils/bundle.min.js')
+    inline_js(bundle).presence || inline_js('crit-utils/bundle.js').presence ||
+      '<!-- CRIT JS NOT FOUND! -->'.html_safe
   end
 
   def critical_css(params = {})
@@ -39,7 +40,14 @@ module CriticalHelper
       data << stylesheet_link_tag(*stylesheets) if stylesheets.present?
     else
       data << inline_css(name)
-      data << css_preload(stylesheets) if stylesheets.present?
+      if stylesheets.present?
+        preload_css = css_preload(stylesheets)
+        if block_given?
+          yield preload_css
+        else
+          data << preload_css
+        end
+      end
       data << inline_js('crit-utils/measure.js') if Rails.env.development?
     end
 

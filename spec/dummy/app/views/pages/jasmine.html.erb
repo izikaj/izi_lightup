@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <meta content="width=device-width" name="viewport" />
+    <meta content="noindex,nofollow" name="robots" />
+    <meta
+      name="fixture_root"
+      content="<%= File.join(Rails.configuration.assets.prefix.presence || '/assets', 'fixtures/') %>"
+    />
+    <link
+      rel="shortcut icon" type="image/png"
+      href="<%= asset_path('support/jasmine-4.0.1/jasmine_favicon.png') %>"
+    />
+    <%= stylesheet_link_tag 'support/jasmine-4.0.1/jasmine.css' %>
+    <title>Jasmine</title>
+  </head>
+  <body>
+    <%= javascript_include_tag 'application_spec', debug: true %>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+      }
+      .jasmine_html-reporter {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+      }
+      .jasmine_html-reporter .jasmine-banner {
+        margin: 0;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+      }
+      .jasmine_html-reporter .jasmine-banner .jasmine-version {
+        flex-grow: 1;
+        top: 0;
+      }
+    </style>
+  </body>
+</html>
