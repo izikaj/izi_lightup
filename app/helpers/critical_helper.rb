@@ -23,7 +23,7 @@ module CriticalHelper
     raw
   end
 
-  def critical_js(bundle: 'crit-utils/bundle.min.js')
+  def critical_js(bundle: 'crit-utils/bundle.js')
     inline_js(bundle).presence || inline_js('crit-utils/bundle.js').presence ||
       '<!-- CRIT JS NOT FOUND! -->'.html_safe
   end
