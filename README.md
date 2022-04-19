@@ -70,9 +70,28 @@ bundle exec rake matrix:install
 
 ### run tests
 
+#### Rspec
 ```sh
 bundle exec rake matrix:spec
 ```
+
+#### Karma
+```sh
+npm test
+or
+npm test:karma
+```
+
+#### All in one (karma + current rspec)
+```sh
+npm test:all
+```
+
+#### Run karma in browser
+```sh
+bundle exec rails server
+```
+and visit root page of server
 
 ### Currently testing on versions:
 
