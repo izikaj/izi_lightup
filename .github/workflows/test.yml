@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -61,3 +61,17 @@ jobs:
           bundle _"$BUNDLER_VERSION"_ install --no-deployment
       - name: Run tests
         run: bundle exec rspec
+  karma:
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: "${{ matrix.gemfile }}"
+      BUNDLER_VERSION: "${{ matrix.bundler }}"
+    steps:
+      - uses: actions/checkout@v2 #Checkout Repo
+      - uses: actions/setup-node@v1 #Setup Node
+        with:
+          node-version: '12'
+      - name: Run tests
+        run: |
+          npm install
+          npm test

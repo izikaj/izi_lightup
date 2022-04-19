@@ -9,7 +9,8 @@
   "scripts": {
     "test:rspec": "bundle exec rspec",
     "test:karma": "karma start",
-    "test": "npm run test:rspec && npm run test:karma"
+    "test:all": "npm run test:rspec && npm run test:karma",
+    "test": "karma start"
   },
   "repository": {
     "type": "git",
