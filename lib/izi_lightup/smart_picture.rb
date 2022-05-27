@@ -38,26 +38,24 @@ module IziLightup
       private
 
       def version_exists?(version)
-        return true if version&.url&.present? && version.url =~ /https?:/
+        return true if version&.url.to_s =~ /https?:/
 
         version&.file&.exists? && version&.url&.present?
       end
 
       def fallback_dimentions(item)
-        [item&.width, item&.height].compact
+        ::FastImage.size(item.url)
       end
 
-      def safe_dimentions_extract(item, version)
-        begin
-          version.dimensions
-        rescue MiniMagick::Error => _e
-          fallback_dimentions(item)
-        end
+      def safe_dimentions_extract(item)
+        item.dimensions
+      rescue MiniMagick::Error => _e
+        fallback_dimentions(item.url)
       end
 
-      def safe_dimentions(item, version)
-        dimensions = fallback_dimentions(item) if version.url =~ /https?:/
-        dimensions ||= safe_dimentions_extract(item, version)
+      def safe_dimentions(item, version = nil)
+        dimensions = fallback_dimentions(version || item) if version.url =~ /https?:/
+        dimensions ||= safe_dimentions_extract(version || item)
 
         return {} if dimensions.blank? || (dimensions.size != 2)
 

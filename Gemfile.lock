@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    izi_lightup (1.0.22)
+    izi_lightup (1.0.24)
       fastimage (>= 2.0.0)
       rails (>= 3.0.0)
 
@@ -50,7 +50,7 @@ GEM
     crass (1.0.6)
     diff-lcs (1.4.4)
     erubis (2.7.0)
-    fastimage (2.2.4)
+    fastimage (2.2.6)
     ffi (1.15.0)
     formatador (0.2.5)
     gemika (0.6.0)
