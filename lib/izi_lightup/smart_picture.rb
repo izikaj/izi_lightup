@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fastimage'
+
 module IziLightup
   module SmartPicture
     class << self
@@ -44,7 +46,7 @@ module IziLightup
       end
 
       def fallback_dimentions(item)
-        ::FastImage.size(item.url)
+        FastImage.size(item.url)
       end
 
       def safe_dimentions_extract(item)
