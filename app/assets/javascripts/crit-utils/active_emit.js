@@ -34,7 +34,7 @@
     try {
       document.dispatchEvent(new Event(EVENT_TYPE));
     } catch (_error) {
-      if (jQuery && jQuery.Event) $(document).trigger(new jQuery.Event(EVENT_TYPE));
+      if (window.jQuery && jQuery.Event) $(document).trigger(new jQuery.Event(EVENT_TYPE));
     }
     window.activeReady = true;
   };
