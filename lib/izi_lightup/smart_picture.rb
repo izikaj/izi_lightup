@@ -52,7 +52,7 @@ module IziLightup
       def safe_dimentions_extract(item)
         item.dimensions
       rescue MiniMagick::Error => _e
-        fallback_dimentions(item.url)
+        fallback_dimentions(item)
       end
 
       def safe_dimentions(item, version = nil)
