@@ -105,7 +105,7 @@ module CriticalHelper
   def asset_exist?(name)
     return find_asset_source(name)&.present? if compile_assets?
 
-    manifest.assets.key?(name)
+    manifest.assets.key?(name) || manifest.environment&.public_send(:[], name) rescue false
   end
 
   def compile_assets?
