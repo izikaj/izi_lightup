@@ -105,7 +105,14 @@ module CriticalHelper
   def asset_exist?(name)
     return find_asset_source(name)&.present? if compile_assets?
 
-    manifest.assets.key?(name) || manifest.environment&.public_send(:[], name) rescue false
+    manifest.assets.key?(name) || has_digest_version?(name) rescue false
+  end
+
+  def has_digest_version?(name)
+    return unless Rails.application.config.respond_to?(:assets)
+    return unless Rails.application.config.assets.respond_to?(:digests)
+
+    Rails.application.config.assets.digests.key?(name)
   end
 
   def compile_assets?
