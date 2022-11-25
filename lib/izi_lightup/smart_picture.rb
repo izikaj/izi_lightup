@@ -51,7 +51,7 @@ module IziLightup
 
       def safe_dimentions_extract(item)
         item.dimensions
-      rescue MiniMagick::Error => _e
+      rescue MiniMagick::Error, NoMethodError => _e
         fallback_dimentions(item)
       end
 
